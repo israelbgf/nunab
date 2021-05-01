@@ -59,7 +59,7 @@ class NubankTransactionToYNABTransaction(TestCase):
     def test_use_nuconta_account_id_when_transaction_is_account_type(self):
         transaction = NubankTransaction('5c4a3f30', -10, 'Test', type='nuconta',
                                         datetime=datetime(2021, 3, 31, 12, 13, 14))
-        config = {'nuconta_account_id': 12345}
+        config = {'nucontaAccountId': 12345}
 
         self.assertEqual(
             YNABTransaction('5c4a3f30', -10, 'Test', date(2021, 3, 31), None, 12345),
@@ -69,7 +69,7 @@ class NubankTransactionToYNABTransaction(TestCase):
     def test_use_creditcard_account_id_when_transaction_is_account_type(self):
         transaction = NubankTransaction('5c4a3f30', -10, 'Test', type='creditcard',
                                         datetime=datetime(2021, 3, 31, 12, 13, 14))
-        config = {'creditcard_account_id': 54321}
+        config = {'creditcardAccountId': 54321}
 
         self.assertEqual(
             YNABTransaction('5c4a3f30', -10, 'Test', date(2021, 3, 31), None, 54321),

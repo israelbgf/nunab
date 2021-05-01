@@ -42,7 +42,7 @@ def find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_transactions: [YN
 def convert_nubank_to_yanb(nubank_transaction, nunab_config=None):
     nunab_config = nunab_config or {}
     account_id = nunab_config.get(
-        'creditcard_account_id' if nubank_transaction.type == 'creditcard' else 'nuconta_account_id')
+        'creditcardAccountId' if nubank_transaction.type == 'creditcard' else 'nucontaAccountId')
 
     return YNABTransaction(
         nubank_transaction.id, nubank_transaction.amount, nubank_transaction.description,
