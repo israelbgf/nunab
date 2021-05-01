@@ -24,7 +24,7 @@ class CreditCardDictToNuBankTransactionTests(TestCase):
         self.assertEqual(
             NubankTransaction(
                 id='6e4244004798',
-                amount=1000,
+                amount=-1000,
                 description='Pappos',
                 type='creditcard',
                 datetime=datetime(2018, 2, 7, 14, 13, 1)),
@@ -86,7 +86,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
         self.assertEqual(
             NubankTransaction(
                 id='8dd05ed3379d',
-                amount=531,
+                amount=-531,
                 description='Transferência para Juca Silva',
                 type='account',
                 datetime=datetime(2021, 4, 8)),
@@ -107,7 +107,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
         self.assertEqual(
             NubankTransaction(
                 id='7bb506717ce0',
-                amount=4497,
+                amount=-4497,
                 description='DARF IRRF',
                 type='account',
                 datetime=datetime(2020, 5, 28)),
@@ -125,7 +125,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
         self.assertEqual(
             NubankTransaction(
                 id='3d9db68688a7',
-                amount=17008,
+                amount=-17008,
                 description='Posto Prudente',
                 type='account',
                 datetime=datetime(2021, 4, 24)),

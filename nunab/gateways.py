@@ -78,6 +78,7 @@ def dict_to_nubank_transaction(dictionary):
     id = dictionary['id'].split('-')[-1]
 
     if type == 'account':
+        event_type = dictionary.get('__typename')
         originAccount = dictionary.get('originAccount', {})
         destinationAccount = dictionary.get('destinationAccount', {}).get('name')
         description = dictionary.get('detail')
@@ -88,12 +89,12 @@ def dict_to_nubank_transaction(dictionary):
             description = dictionary.get('title')
         if destinationAccount:
             description = 'Transferência para {}'.format(destinationAccount)
-        if dictionary.get('__typename') == 'DebitPurchaseEvent':
+        if event_type == 'DebitPurchaseEvent':
             description = description.split(' - ')[0]
 
         return NubankTransaction(
             id,
-            int(dictionary['amount'] * 100),
+            int(dictionary['amount'] * 100 * (1 if 'TransferIn' in event_type else -1)),
             description,
             type,
             datetime.strptime(dictionary['postDate'], "%Y-%m-%d"),
@@ -101,7 +102,7 @@ def dict_to_nubank_transaction(dictionary):
     else:
         return NubankTransaction(
             id,
-            dictionary['amount'],
+            dictionary['amount'] * -1,
             dictionary['description'],
             type,
             datetime.strptime(dictionary['time'], "%Y-%m-%dT%H:%M:%SZ"),
