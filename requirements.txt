@@ -1,2 +1,2 @@
 git+https://github.com/israelbgf/pynubank.git#egg=pynubank
-ynab-sdk==0.2.4
+PyYAML==5.4.1
