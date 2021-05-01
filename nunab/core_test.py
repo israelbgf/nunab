@@ -1,8 +1,8 @@
 from datetime import datetime, date
 from unittest.case import TestCase
 
-from main import find_nubank_changes_that_needs_to_be_imported_to_ynab, NubankTransaction, YNABTransaction, \
-    dict_to_ynab_transaction, dict_to_nubank_transaction
+from core import NubankTransaction, YNABTransaction, find_nubank_changes_that_needs_to_be_imported_to_ynab, \
+    dict_to_nubank_transaction, dict_to_ynab_transaction
 
 
 class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
