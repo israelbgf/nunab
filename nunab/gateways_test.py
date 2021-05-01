@@ -120,3 +120,21 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 "postDate": "2020-05-28",
                 "amount": 44.97
             }))
+
+    def test_parse_debit_payment_dict(self):
+        self.assertEqual(
+            NubankTransaction(
+                id='6084551b',
+                amount=17008,
+                description='Posto Prudente',
+                type='account',
+                datetime=datetime(2021, 4, 24)),
+
+            dict_to_nubank_transaction({
+                "id": "6084551b-xxxx-xxxx-xxxx-3d9db68688a7",
+                "__typename": "DebitPurchaseEvent",
+                "title": "Compra no d\u00e9bito",
+                "detail": "Posto Prudente - R$\u00a0170,08",
+                "postDate": "2021-04-24",
+                "amount": 170.08
+            }))
