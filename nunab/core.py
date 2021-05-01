@@ -1,4 +1,3 @@
-import re
 from dataclasses import dataclass
 from datetime import datetime, date
 
@@ -34,49 +33,3 @@ def find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_transactions: [YN
             matches.append(transaction)
 
     return matches
-
-
-def dict_to_nubank_transaction(dictionary):
-    type = 'account' if 'postDate' in dictionary else 'creditcard'
-    id = dictionary['id'].split('-')[0]
-
-    if type == 'account':
-        originAccount = dictionary.get('originAccount', {})
-        destinationAccount = dictionary.get('destinationAccount', {}).get('name')
-        description = dictionary.get('detail')
-
-        if originAccount:
-            description = 'Depósito de {}'.format(originAccount.get('name'))
-        if originAccount is None:
-            description = dictionary.get('title')
-
-        if destinationAccount:
-            description = 'Transferência para {}'.format(destinationAccount)
-
-        return NubankTransaction(
-            id,
-            int(dictionary['amount'] * 100),
-            description,
-            type,
-            datetime.strptime(dictionary['postDate'], "%Y-%m-%d"),
-        )
-    else:
-        return NubankTransaction(
-            id,
-            dictionary['amount'],
-            dictionary['description'],
-            type,
-            datetime.strptime(dictionary['time'], "%Y-%m-%dT%H:%M:%SZ"),
-        )
-
-
-def dict_to_ynab_transaction(dictionary):
-    nubank_id = ''
-
-    matches = re.findall("#NuId:(.*)", dictionary['memo'] or '')
-    if matches:
-        nubank_id = matches[-1]
-
-    return YNABTransaction(
-        nubank_id,
-    )

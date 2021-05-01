@@ -1,10 +1,12 @@
 import json
 import os
+import re
+from datetime import datetime
 
 import requests
 from pynubank import Nubank
 
-from core import dict_to_nubank_transaction, dict_to_ynab_transaction
+from core import YNABTransaction, NubankTransaction
 
 NUBANK_CPF = os.environ.get('NUBANK_CPF')
 NUBANK_PASSWORD = os.environ.get('NUBANK_PASSWORD')
@@ -57,3 +59,49 @@ def send_changes_to_ynab(changes):
         sum += change.amount
         print(change)
     print(sum)
+
+
+def dict_to_ynab_transaction(dictionary):
+    nubank_id = ''
+
+    matches = re.findall("#NuId:(.*)", dictionary['memo'] or '')
+    if matches:
+        nubank_id = matches[-1]
+
+    return YNABTransaction(
+        nubank_id,
+    )
+
+
+def dict_to_nubank_transaction(dictionary):
+    type = 'account' if 'postDate' in dictionary else 'creditcard'
+    id = dictionary['id'].split('-')[0]
+
+    if type == 'account':
+        originAccount = dictionary.get('originAccount', {})
+        destinationAccount = dictionary.get('destinationAccount', {}).get('name')
+        description = dictionary.get('detail')
+
+        if originAccount:
+            description = 'Depósito de {}'.format(originAccount.get('name'))
+        if originAccount is None:
+            description = dictionary.get('title')
+
+        if destinationAccount:
+            description = 'Transferência para {}'.format(destinationAccount)
+
+        return NubankTransaction(
+            id,
+            int(dictionary['amount'] * 100),
+            description,
+            type,
+            datetime.strptime(dictionary['postDate'], "%Y-%m-%d"),
+        )
+    else:
+        return NubankTransaction(
+            id,
+            dictionary['amount'],
+            dictionary['description'],
+            type,
+            datetime.strptime(dictionary['time'], "%Y-%m-%dT%H:%M:%SZ"),
+        )
