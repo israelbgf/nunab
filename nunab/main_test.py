@@ -105,6 +105,24 @@ class AccountDictToNuBankTransactionTests(TestCase):
                     "name": "Tinhoso Fonseca"
                 }}))
 
+    def test_parse_unknown_source_deposit_dict(self):
+        self.assertEqual(
+            NubankTransaction(
+                id='606f2b6e',
+                amount=250000,
+                description='Transfer\u00eancia recebida',
+                type='account',
+                datetime=datetime(2021, 4, 8)),
+
+            dict_to_nubank_transaction({
+                "id": "606f2b6e-xxxx-xxxx-xxxx-8dd05ed3379d",
+                "__typename": "TransferInEvent",
+                "title": "Transfer\u00eancia recebida",
+                "detail": "R$\u00a02.500,00",
+                "postDate": "2021-04-08",
+                "amount": 2500.0,
+                "originAccount": None}))
+
     def test_parse_transfer_dict(self):
         self.assertEqual(
             NubankTransaction(

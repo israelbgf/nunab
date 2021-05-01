@@ -83,12 +83,15 @@ def dict_to_nubank_transaction(dictionary):
     id = dictionary['id'].split('-')[0]
 
     if type == 'account':
-        originAccount = dictionary.get('originAccount', {}).get('name')
+        originAccount = dictionary.get('originAccount', {})
         destinationAccount = dictionary.get('destinationAccount', {}).get('name')
         description = dictionary.get('detail')
 
         if originAccount:
-            description = 'Depósito de {}'.format(originAccount)
+            description = 'Depósito de {}'.format(originAccount.get('name'))
+        if originAccount is None:
+            description = dictionary.get('title')
+
         if destinationAccount:
             description = 'Transferência para {}'.format(destinationAccount)
 
