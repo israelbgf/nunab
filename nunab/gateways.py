@@ -75,7 +75,7 @@ def dict_to_ynab_transaction(dictionary):
 
 def dict_to_nubank_transaction(dictionary):
     type = 'account' if 'postDate' in dictionary else 'creditcard'
-    id = dictionary['id'].split('-')[0]
+    id = dictionary['id'].split('-')[-1]
 
     if type == 'account':
         originAccount = dictionary.get('originAccount', {})
@@ -84,11 +84,12 @@ def dict_to_nubank_transaction(dictionary):
 
         if originAccount:
             description = 'Depósito de {}'.format(originAccount.get('name'))
-        if originAccount is None:
+        elif originAccount is None:
             description = dictionary.get('title')
-
         if destinationAccount:
             description = 'Transferência para {}'.format(destinationAccount)
+        if dictionary.get('__typename') == 'DebitPurchaseEvent':
+            description = description.split(' - ')[0]
 
         return NubankTransaction(
             id,

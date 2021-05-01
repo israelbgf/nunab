@@ -23,7 +23,7 @@ class CreditCardDictToNuBankTransactionTests(TestCase):
     def test_parse_transaction_from_dictionary(self):
         self.assertEqual(
             NubankTransaction(
-                id='5a7b096d',
+                id='6e4244004798',
                 amount=1000,
                 description='Pappos',
                 type='creditcard',
@@ -37,7 +37,7 @@ class CreditCardDictToNuBankTransactionTests(TestCase):
                 'details': {'lat': -26.2542084,
                             'lon': -48.8492242,
                             'subcategory': 'card_present'},
-                'id': '5a7b096d-a251-xxxx-xxxx-xxxxxxxxxxxx',
+                'id': '5a7b096d-a251-xxxx-xxxx-6e4244004798',
                 'time': '2018-02-07T14:13:01Z',
                 'title': 'restaurante'}))
 
@@ -47,7 +47,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
     def test_parse_deposit_dict(self):
         self.assertEqual(
             NubankTransaction(
-                id='606f2b6e',
+                id='8dd05ed3379d',
                 amount=250000,
                 description='Depósito de Tinhoso Fonseca',
                 type='account',
@@ -67,7 +67,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
     def test_parse_unknown_source_deposit_dict(self):
         self.assertEqual(
             NubankTransaction(
-                id='606f2b6e',
+                id='8dd05ed3379d',
                 amount=250000,
                 description='Transfer\u00eancia recebida',
                 type='account',
@@ -85,7 +85,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
     def test_parse_transfer_dict(self):
         self.assertEqual(
             NubankTransaction(
-                id='756f2b6e',
+                id='8dd05ed3379d',
                 amount=531,
                 description='Transferência para Juca Silva',
                 type='account',
@@ -106,7 +106,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
     def test_parse_barcode_dict(self):
         self.assertEqual(
             NubankTransaction(
-                id='5ecf3833',
+                id='7bb506717ce0',
                 amount=4497,
                 description='DARF IRRF',
                 type='account',
@@ -124,7 +124,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
     def test_parse_debit_payment_dict(self):
         self.assertEqual(
             NubankTransaction(
-                id='6084551b',
+                id='3d9db68688a7',
                 amount=17008,
                 description='Posto Prudente',
                 type='account',
