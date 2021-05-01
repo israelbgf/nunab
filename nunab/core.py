@@ -18,14 +18,13 @@ class YNABTransaction:
 
 def find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_transactions: [YNABTransaction],
                                                           nubank_transactions: [NubankTransaction],
-                                                          valid_range: (date, date) = None):
+                                                          valid_range: (date, date)):
     ynab_transactions = {t.nubank_id: t for t in ynab_transactions}
 
     matches = []
     for transaction in nubank_transactions:
-        has_range = valid_range is None
-        inside_valid_range = True if has_range else valid_range[0] <= transaction.datetime.date() <= valid_range[1]
-        if not inside_valid_range:
+        inside_range = valid_range[0] <= transaction.datetime.date() <= valid_range[1]
+        if not inside_range:
             continue
 
         ynab_match = ynab_transactions.get(transaction.id)

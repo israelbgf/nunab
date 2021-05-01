@@ -1,7 +1,10 @@
-from datetime import datetime, date
+from datetime import date, timedelta, datetime
 from unittest.case import TestCase
 
 from core import NubankTransaction, YNABTransaction, find_nubank_changes_that_needs_to_be_imported_to_ynab
+
+YESTERDAY = date.today() - timedelta(days=1)
+TOMORROW = date.today() + timedelta(days=1)
 
 
 class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
@@ -10,7 +13,7 @@ class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
         ynab_data = []
         nubank_data = [NubankTransaction('5c4a3f30'), NubankTransaction('40370dcb')]
 
-        result = find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_data, nubank_data)
+        result = find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_data, nubank_data, (YESTERDAY, TOMORROW))
 
         self.assertEqual(nubank_data, result)
 
@@ -18,7 +21,7 @@ class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
         ynab_data = [YNABTransaction(nubank_id='5c4a3f30')]
         nubank_data = [NubankTransaction('5c4a3f30')]
 
-        result = find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_data, nubank_data)
+        result = find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_data, nubank_data, (YESTERDAY, TOMORROW))
 
         self.assertEqual([], result)
 
@@ -26,7 +29,7 @@ class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
         ynab_data = [YNABTransaction(nubank_id='5c4a3f30'), YNABTransaction(nubank_id='')]
         nubank_data = [NubankTransaction('5c4a3f30'), NubankTransaction('4b3n5c62')]
 
-        result = find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_data, nubank_data)
+        result = find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_data, nubank_data, (YESTERDAY, TOMORROW))
 
         self.assertEqual([NubankTransaction('4b3n5c62')], result)
 
@@ -39,7 +42,6 @@ class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
         ]
 
         result = find_nubank_changes_that_needs_to_be_imported_to_ynab(
-            ynab_data, nubank_data,
-            valid_range=(date(2021, 4, 1), date(2021, 4, 30)))
+            ynab_data, nubank_data, (date(2021, 4, 1), date(2021, 4, 30)))
 
         self.assertEqual([nubank_data[1]], result)
