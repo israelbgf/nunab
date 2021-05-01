@@ -14,6 +14,11 @@ class NubankTransaction:
 @dataclass
 class YNABTransaction:
     nubank_id: str = ''
+    amount: int = 0
+    description: str = ''
+    date: date = None
+    category_id: int = None
+    account_id: int = None
 
 
 def find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_transactions: [YNABTransaction],
@@ -32,3 +37,16 @@ def find_nubank_changes_that_needs_to_be_imported_to_ynab(ynab_transactions: [YN
             matches.append(transaction)
 
     return matches
+
+
+def convert_nubank_to_yanb(nubank_transaction, nunab_config=None):
+    nunab_config = nunab_config or {}
+    account_id = nunab_config.get(
+        'creditcard_account_id' if nubank_transaction.type == 'creditcard' else 'nuconta_account_id')
+
+    return YNABTransaction(
+        nubank_transaction.id, nubank_transaction.amount, nubank_transaction.description,
+        nubank_transaction.datetime.date(),
+        nunab_config.get('categoryMapping', {}).get(nubank_transaction.description),
+        account_id
+    )

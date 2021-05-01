@@ -1,7 +1,8 @@
 from datetime import date, timedelta, datetime
 from unittest.case import TestCase
 
-from core import NubankTransaction, YNABTransaction, find_nubank_changes_that_needs_to_be_imported_to_ynab
+from core import NubankTransaction, YNABTransaction, find_nubank_changes_that_needs_to_be_imported_to_ynab, \
+    convert_nubank_to_yanb
 
 YESTERDAY = date.today() - timedelta(days=1)
 TOMORROW = date.today() + timedelta(days=1)
@@ -45,3 +46,42 @@ class FindNubankChangesThatNeedsToBeImportedToYnabTests(TestCase):
             ynab_data, nubank_data, (date(2021, 4, 1), date(2021, 4, 30)))
 
         self.assertEqual([nubank_data[1]], result)
+
+
+class NubankTransactionToYNABTransaction(TestCase):
+
+    def test_simple_conversion(self):
+        self.assertEqual(
+            YNABTransaction('5c4a3f30', -10, 'Test', date(2021, 3, 31), None, None),
+            convert_nubank_to_yanb(NubankTransaction('5c4a3f30', -10, 'Test',
+                                                     type='account', datetime=datetime(2021, 3, 31, 12, 13, 14))))
+
+    def test_use_nuconta_account_id_when_transaction_is_account_type(self):
+        transaction = NubankTransaction('5c4a3f30', -10, 'Test', type='nuconta',
+                                        datetime=datetime(2021, 3, 31, 12, 13, 14))
+        config = {'nuconta_account_id': 12345}
+
+        self.assertEqual(
+            YNABTransaction('5c4a3f30', -10, 'Test', date(2021, 3, 31), None, 12345),
+            convert_nubank_to_yanb(transaction, config)
+        )
+
+    def test_use_creditcard_account_id_when_transaction_is_account_type(self):
+        transaction = NubankTransaction('5c4a3f30', -10, 'Test', type='creditcard',
+                                        datetime=datetime(2021, 3, 31, 12, 13, 14))
+        config = {'creditcard_account_id': 54321}
+
+        self.assertEqual(
+            YNABTransaction('5c4a3f30', -10, 'Test', date(2021, 3, 31), None, 54321),
+            convert_nubank_to_yanb(transaction, config)
+        )
+
+    def test_use_category_id_when_theres_a_mapping_set(self):
+        transaction = NubankTransaction('5c4a3f30', -10, 'Test', type='creditcard',
+                                        datetime=datetime(2021, 3, 31, 12, 13, 14))
+        config = {'categoryMapping': {'Test': 999}}
+
+        self.assertEqual(
+            YNABTransaction('5c4a3f30', -10, 'Test', date(2021, 3, 31), 999, None),
+            convert_nubank_to_yanb(transaction, config)
+        )
