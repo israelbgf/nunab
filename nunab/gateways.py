@@ -53,14 +53,6 @@ def get_nubank_transactions():
     return transactions
 
 
-def send_changes_to_ynab(changes):
-    sum = 0
-    for change in changes:
-        sum += change.amount
-        print(change)
-    print(sum)
-
-
 def dict_to_ynab_transaction(dictionary):
     nubank_id = ''
 
@@ -107,3 +99,22 @@ def dict_to_nubank_transaction(dictionary):
             type,
             datetime.strptime(dictionary['time'], "%Y-%m-%dT%H:%M:%SZ"),
         )
+
+
+def send_changes_to_ynab_stdout(changes):
+    sum = 0
+    for change in changes:
+        sum += change.amount
+        print(change)
+    print(sum)
+
+
+def send_changes_to_ynab_real(changes):
+    print('TODO')
+
+
+DEBUG = True
+if DEBUG:
+    send_changes_to_ynab = send_changes_to_ynab_stdout
+else:
+    send_changes_to_ynab = send_changes_to_ynab_real
