@@ -29,7 +29,7 @@ def download_ynab_transactions(since, dest):
 
 def get_ynab_transactions():
     with open('transactions.ynab.json') as input:
-        return map(dict_to_ynab_transaction, json.load(input)['data']['transactions'])
+        return list(map(dict_to_ynab_transaction, json.load(input)['data']['transactions']))
 
 
 def download_nubank_transactions():
