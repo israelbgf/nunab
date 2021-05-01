@@ -109,8 +109,36 @@ def send_changes_to_ynab_stdout(changes):
     print(sum)
 
 
+def list_ynab_categories():
+    response = requests.get(
+        f'https://api.youneedabudget.com/v1/budgets/{YNAB_BUDGET_ID}/categories',
+        headers={
+            'Authorization': f'Bearer {YNAB_API_TOKEN}',
+            'accept': 'application/json'
+        })
+
+    categories = json.loads(response.content)
+    for category_group in categories['data']['category_groups']:
+        for category in category_group['categories']:
+            if not category['deleted']:
+                print(category['name'], '||', category['id'])
+
+
 def send_changes_to_ynab_real(changes):
-    print('TODO')
+    pass
+    # response = requests.post(
+    #     f'https://api.youneedabudget.com/v1/budgets/{YNAB_BUDGET_ID}/transactions',
+    #     json={'transactions': [{
+    #         "account_id": None,
+    #         "amount": change.amount,
+    #         "category_id": None,
+    #         "date": change.datetime,
+    #         "memo": change.description
+    #     } for change in changes]},
+    #     headers={
+    #         'Authorization': f'Bearer {YNAB_API_TOKEN}',
+    #         'accept': 'application/json'
+    #     })
 
 
 DEBUG = True
