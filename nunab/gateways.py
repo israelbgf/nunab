@@ -101,12 +101,12 @@ def dict_to_nubank_transaction(dictionary):
         )
 
 
-def send_changes_to_ynab_stdout(changes):
+def send_changes_to_ynab_stdout(transactions):
     sum = 0
-    for change in changes:
-        sum += change.amount
-        print(change)
-    print(sum)
+    for t in transactions:
+        sum += t.amount
+        print(t)
+    print('Sum:', sum)
 
 
 def list_ynab_categories():
@@ -124,25 +124,28 @@ def list_ynab_categories():
                 print(category['name'], '||', category['id'])
 
 
-def send_changes_to_ynab_real(changes):
-    pass
-    # response = requests.post(
-    #     f'https://api.youneedabudget.com/v1/budgets/{YNAB_BUDGET_ID}/transactions',
-    #     json={'transactions': [{
-    #         "account_id": None,
-    #         "amount": change.amount,
-    #         "category_id": None,
-    #         "date": change.datetime,
-    #         "memo": change.description
-    #     } for change in changes]},
-    #     headers={
-    #         'Authorization': f'Bearer {YNAB_API_TOKEN}',
-    #         'accept': 'application/json'
-    #     })
+def send_changes_to_ynab_real(transactions: [YNABTransaction]):
+    response = requests.post(
+        f'https://api.youneedabudget.com/v1/budgets/{YNAB_BUDGET_ID}/transactions',
+        json={
+            'transactions': [{
+                "account_id": t.account_id,
+                "amount": t.amount * 10,  # For some reason, the API needs one extra 0.
+                "category_id": t.category_id,
+                "date": t.date.strftime("%Y-%m-%d"),
+                "memo": t.description
+            } for t in transactions]},
+        headers={
+            'Authorization': f'Bearer {YNAB_API_TOKEN}',
+            'accept': 'application/json'
+        })
+
+    if response.status_code != 201:
+        raise Exception(response.content)
 
 
-DEBUG = True
-if DEBUG:
-    send_changes_to_ynab = send_changes_to_ynab_stdout
-else:
-    send_changes_to_ynab = send_changes_to_ynab_real
+def send_changes_to_ynab(transactions, dryrun):
+    if dryrun:
+        send_changes_to_ynab_stdout(transactions)
+    else:
+        send_changes_to_ynab_real(transactions)
