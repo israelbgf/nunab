@@ -66,10 +66,10 @@ def dict_to_ynab_transaction(dictionary):
 
 
 def dict_to_nubank_transaction(dictionary):
-    type = 'account' if 'postDate' in dictionary else 'creditcard'
+    type = 'nuconta' if 'postDate' in dictionary else 'creditcard'
     id = dictionary['id'].split('-')[-1]
 
-    if type == 'account':
+    if type == 'nuconta':
         event_type = dictionary.get('__typename')
         originAccount = dictionary.get('originAccount', {})
         destinationAccount = dictionary.get('destinationAccount', {}).get('name')

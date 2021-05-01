@@ -50,7 +50,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 id='8dd05ed3379d',
                 amount=250000,
                 description='Depósito de Tinhoso Fonseca',
-                type='account',
+                type='nuconta',
                 datetime=datetime(2021, 4, 8)),
 
             dict_to_nubank_transaction({
@@ -70,7 +70,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 id='8dd05ed3379d',
                 amount=250000,
                 description='Transfer\u00eancia recebida',
-                type='account',
+                type='nuconta',
                 datetime=datetime(2021, 4, 8)),
 
             dict_to_nubank_transaction({
@@ -88,7 +88,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 id='8dd05ed3379d',
                 amount=-531,
                 description='Transferência para Juca Silva',
-                type='account',
+                type='nuconta',
                 datetime=datetime(2021, 4, 8)),
 
             dict_to_nubank_transaction({
@@ -109,7 +109,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 id='7bb506717ce0',
                 amount=-4497,
                 description='DARF IRRF',
-                type='account',
+                type='nuconta',
                 datetime=datetime(2020, 5, 28)),
 
             dict_to_nubank_transaction({
@@ -127,7 +127,7 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 id='3d9db68688a7',
                 amount=-17008,
                 description='Posto Prudente',
-                type='account',
+                type='nuconta',
                 datetime=datetime(2021, 4, 24)),
 
             dict_to_nubank_transaction({
