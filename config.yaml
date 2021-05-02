@@ -1,0 +1,8 @@
+x-ynabCategoriesId:
+  - &yourCategoryName YNAB_ID
+
+nucontaAccountId: ""
+creditcardAccountId: ""
+
+categoryMapping:
+  "NuBank CreditCard Transaction Description": *yourCategoryName
