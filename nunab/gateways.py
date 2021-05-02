@@ -59,9 +59,10 @@ def get_nubank_transactions():
 def dict_to_ynab_transaction(dictionary):
     nubank_id = ''
 
-    matches = re.findall("#NuId:(.*)", dictionary['memo'] or '')
-    if matches:
-        nubank_id = matches[-1]
+    memo = dictionary['memo'] or ''
+    index_of_last_hastag_the_marker_of_nubank_id = memo.rfind('#')
+    if index_of_last_hastag_the_marker_of_nubank_id > -1:
+        nubank_id = memo[index_of_last_hastag_the_marker_of_nubank_id + 1:]
 
     return YNABTransaction(
         nubank_id,

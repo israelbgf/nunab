@@ -52,7 +52,7 @@ class NubankTransactionToYNABTransaction(TestCase):
 
     def test_simple_conversion(self):
         self.assertEqual(
-            YNABTransaction('5c4a3f30', -10, 'Test #NuId:5c4a3f30', date(2021, 3, 31), None, None),
+            YNABTransaction('5c4a3f30', -10, 'Test #5c4a3f30', date(2021, 3, 31), None, None),
             convert_nubank_to_yanb(NubankTransaction('5c4a3f30', -10, 'Test',
                                                      type='account', datetime=datetime(2021, 3, 31, 12, 13, 14))))
 
@@ -62,7 +62,7 @@ class NubankTransactionToYNABTransaction(TestCase):
         config = {'nucontaAccountId': 12345}
 
         self.assertEqual(
-            YNABTransaction('5c4a3f30', -10, 'Test #NuId:5c4a3f30', date(2021, 3, 31), None, 12345),
+            YNABTransaction('5c4a3f30', -10, 'Test #5c4a3f30', date(2021, 3, 31), None, 12345),
             convert_nubank_to_yanb(transaction, config)
         )
 
@@ -72,7 +72,7 @@ class NubankTransactionToYNABTransaction(TestCase):
         config = {'creditcardAccountId': 54321}
 
         self.assertEqual(
-            YNABTransaction('5c4a3f30', -10, 'Test #NuId:5c4a3f30', date(2021, 3, 31), None, 54321),
+            YNABTransaction('5c4a3f30', -10, 'Test #5c4a3f30', date(2021, 3, 31), None, 54321),
             convert_nubank_to_yanb(transaction, config)
         )
 
@@ -82,6 +82,6 @@ class NubankTransactionToYNABTransaction(TestCase):
         config = {'categoryMapping': {'Test': 999}}
 
         self.assertEqual(
-            YNABTransaction('5c4a3f30', -10, 'Test #NuId:5c4a3f30', date(2021, 3, 31), 999, None),
+            YNABTransaction('5c4a3f30', -10, 'Test #5c4a3f30', date(2021, 3, 31), 999, None),
             convert_nubank_to_yanb(transaction, config)
         )

@@ -47,7 +47,7 @@ def convert_nubank_to_yanb(nubank_transaction, nunab_config=None):
     return YNABTransaction(
         nubank_transaction.id,
         nubank_transaction.amount,
-        f'{nubank_transaction.description} #NuId:{nubank_transaction.id}',
+        f'{nubank_transaction.description} #{nubank_transaction.id}',
         nubank_transaction.datetime.date(),
         nunab_config.get('categoryMapping', {}).get(nubank_transaction.description),
         account_id

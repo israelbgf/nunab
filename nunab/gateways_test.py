@@ -12,7 +12,7 @@ class DictToYnabTransactionTests(TestCase):
 
     def test_nubank_id_parsed_when_memo_contains_previously_saved_nubank_id(self):
         self.assertEqual(YNABTransaction(nubank_id='12345'), dict_to_ynab_transaction({"memo": "BRAVOS #GRIL "
-                                                                                               "#NuId:12345"}))
+                                                                                               "#12345"}))
 
     def test_nubank_id_is_empty_when_memo_is_none(self):
         self.assertEqual(YNABTransaction(), dict_to_ynab_transaction({"memo": None}))
