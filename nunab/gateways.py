@@ -16,6 +16,7 @@ YNAB_BUDGET_ID = os.environ.get('YNAB_BUDGET_ID')
 
 
 def download_ynab_transactions(since, dest):
+    print(f'Downloading YNAB data since {since}...')
     response = requests.get(
         f'https://api.youneedabudget.com/v1/budgets/{YNAB_BUDGET_ID}/transactions?since_date={since}',
         headers={
@@ -42,6 +43,8 @@ def download_nubank_transactions():
     statements = nu.get_account_statements()
     with open('account_transactions.nubank.json', 'w') as output:
         json.dump(statements, output)
+
+    print('Data updated. Now you can sync it with \'sync-ynab\' command.')
 
 
 def get_nubank_transactions():
@@ -145,7 +148,12 @@ def send_changes_to_ynab_real(transactions: [YNABTransaction]):
 
 
 def send_changes_to_ynab(transactions):
+    if not transactions:
+        print('Nothing to import.')
+        return
+
     print('The following transactions will be imported.\n')
     send_changes_to_ynab_stdout(transactions)
     input("\nPress enter to continue...")
     send_changes_to_ynab_real(transactions)
+    print('Data synced.')

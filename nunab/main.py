@@ -1,5 +1,5 @@
 import sys
-from datetime import date
+from datetime import date, timedelta
 
 import yaml
 
@@ -21,10 +21,11 @@ def sync_ynab_with_nubank():
 if __name__ == '__main__':
     input = sys.argv[1]
 
-    if input == 'donwload-data':
-        download_ynab_transactions(since='2021-04-01', dest='transactions.ynab.json')
+    if input == 'download-nubank-data':
         download_nubank_transactions()
     if input == 'sync-ynab':
+        ultimos_sete_dias = (date.today() - timedelta(days=7)).strftime("%Y-%m-%d")
+        download_ynab_transactions(since=ultimos_sete_dias, dest='transactions.ynab.json')
         sync_ynab_with_nubank()
     if input == 'debug-ynab':
         list_ynab_categories()
