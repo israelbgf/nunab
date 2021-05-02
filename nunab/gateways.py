@@ -144,8 +144,8 @@ def send_changes_to_ynab_real(transactions: [YNABTransaction]):
         raise Exception(response.content)
 
 
-def send_changes_to_ynab(transactions, dryrun):
-    if dryrun:
-        send_changes_to_ynab_stdout(transactions)
-    else:
-        send_changes_to_ynab_real(transactions)
+def send_changes_to_ynab(transactions):
+    print('The following transactions will be imported.\n')
+    send_changes_to_ynab_stdout(transactions)
+    input("\nPress enter to continue...")
+    send_changes_to_ynab_real(transactions)
