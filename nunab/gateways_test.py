@@ -8,11 +8,12 @@ from gateways import dict_to_ynab_transaction, dict_to_nubank_transaction
 class DictToYnabTransactionTests(TestCase):
 
     def test_nubank_id_is_empty_when_memo_do_not_contains_previously_saved_nubank_id(self):
-        self.assertEqual(YNABTransaction(nubank_id=''), dict_to_ynab_transaction({"memo": "BRAVOS GRIL"}))
+        self.assertEqual(YNABTransaction(nubank_id='', description="BRAVOS GRIL"),
+                         dict_to_ynab_transaction({"memo": "BRAVOS GRIL"}))
 
     def test_nubank_id_parsed_when_memo_contains_previously_saved_nubank_id(self):
-        self.assertEqual(YNABTransaction(nubank_id='12345'), dict_to_ynab_transaction({"memo": "BRAVOS #GRIL "
-                                                                                               "#12345"}))
+        self.assertEqual(YNABTransaction(nubank_id='12345', description="BRAVOS #GRIL #12345"),
+                         dict_to_ynab_transaction({"memo": "BRAVOS #GRIL #12345"}))
 
     def test_nubank_id_is_empty_when_memo_is_none(self):
         self.assertEqual(YNABTransaction(), dict_to_ynab_transaction({"memo": None}))

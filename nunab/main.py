@@ -24,8 +24,8 @@ if __name__ == '__main__':
     if input == 'download-nubank-data':
         download_nubank_transactions()
     if input == 'sync-ynab':
-        ultimos_sete_dias = (date.today() - timedelta(days=7)).strftime("%Y-%m-%d")
-        download_ynab_transactions(since=ultimos_sete_dias, dest='transactions.ynab.json')
+        max_date_to_avoid_large_response = (date.today() - timedelta(days=30)).strftime("%Y-%m-%d")
+        download_ynab_transactions(since=max_date_to_avoid_large_response, dest='transactions.ynab.json')
         sync_ynab_with_nubank()
     if input == 'debug-ynab':
         list_ynab_categories()

@@ -1,6 +1,5 @@
 import json
 import os
-import re
 from datetime import datetime
 
 import requests
@@ -66,6 +65,7 @@ def dict_to_ynab_transaction(dictionary):
 
     return YNABTransaction(
         nubank_id,
+        description=memo,
     )
 
 
