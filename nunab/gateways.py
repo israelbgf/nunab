@@ -39,7 +39,7 @@ def download_nubank_transactions():
     with open('creditcard_transactions.nubank.json', 'w') as output:
         json.dump(statements, output)
 
-    statements = nu.get_account_statements()
+    statements = nu.get_account_feed()
     with open('account_transactions.nubank.json', 'w') as output:
         json.dump(statements, output)
 
@@ -88,9 +88,16 @@ def dict_to_nubank_transaction(dictionary):
         if event_type == 'DebitPurchaseEvent':
             description = description.split(' - ')[0]
 
+        if event_type == 'GenericFeedEvent':
+            amount_start = description.index('R$')
+            amount = int(description[amount_start + 3:].replace(',', '').replace('.', '')) * -1
+            description = 'Transferência para {}'.format(description[:amount_start - 1])
+        else:
+            amount = int(dictionary.get('amount', 0) * 100 * (1 if 'TransferIn' in event_type else -1))
+
         return NubankTransaction(
             id,
-            int(dictionary['amount'] * 100 * (1 if 'TransferIn' in event_type else -1)),
+            amount,
             description,
             type,
             datetime.strptime(dictionary['postDate'], "%Y-%m-%d"),

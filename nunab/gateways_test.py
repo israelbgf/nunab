@@ -139,3 +139,38 @@ class AccountDictToNuBankTransactionTests(TestCase):
                 "postDate": "2021-04-24",
                 "amount": 170.08
             }))
+
+    def test_parse_pix_transfer_dict(self):
+        self.assertEqual(
+            NubankTransaction(
+                id='5eb59a8f2c43',
+                amount=-170069,
+                description='Transferência para Shu Silva Pereira',
+                type='nuconta',
+                datetime=datetime(2021, 5, 5)),
+
+            dict_to_nubank_transaction({
+                "id": "6092d09e-xxxx-xxxx-xxxx-5eb59a8f2c43",
+                "__typename": "GenericFeedEvent",
+                "title": "Transfer\u00eancia enviada",
+                "detail": "Shu Silva Pereira\nR$\u00a01.700,69",
+                "postDate": "2021-05-05"
+            }, ))
+
+    def test_amount_zero_for_internal_saving_event(self):
+        # FIXME: This kind of statement should be ignored.
+        self.assertEqual(
+            NubankTransaction(
+                id='86cf95a942bf',
+                amount=-0,
+                description='R$\u00a01.000,00',
+                type='nuconta',
+                datetime=datetime(2010, 5, 2)),
+
+            dict_to_nubank_transaction({
+                "id": "5f26c715-xxxx-xxxx-xxxx-86cf95a942bf",
+                "__typename": "AddToReserveEvent",
+                "title": "Dinheiro guardado",
+                "detail": "R$\u00a01.000,00",
+                "postDate": "2010-05-02"
+            }))
